@@ -1,0 +1,57 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Drive the `dark:` variant from a `.dark` class on <html> (toggled in JS)
+   instead of the OS preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Background fallbacks so there's no flash before React paints. The boot
+   script in index.html sets `.dark` on <html> before first paint. */
+html {
+  background-color: #ffffff;
+}
+html.dark {
+  background-color: #0f172a; /* slate-900 */
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The typography plugin wraps inline code in literal backticks via
+   ::before / ::after — strip them so inline `code` reads cleanly. */
+.prose :where(code):not(:where([class~="not-prose"] *))::before,
+.prose :where(code):not(:where([class~="not-prose"] *))::after {
+  content: "";
+}
+
+/* Give inline code a subtle pill look (fenced blocks are handled by
+   react-syntax-highlighter and opt out via the language- class). */
+.prose :where(code):not(:where([class~="not-prose"] *)):not(pre code) {
+  background-color: rgb(241 245 249);
+  color: rgb(190 24 93);
+  padding: 0.15em 0.4em;
+  border-radius: 0.3rem;
+  font-weight: 500;
+  font-size: 0.875em;
+}
+
+/* Dark-mode inline code pill. */
+.dark .prose :where(code):not(:where([class~="not-prose"] *)):not(pre code) {
+  background-color: rgb(30 41 59); /* slate-800 */
+  color: rgb(244 114 182); /* pink-400 */
+}
+
+/* A comfortable, slightly larger editor caret area */
+textarea {
+  tab-size: 2;
+}
